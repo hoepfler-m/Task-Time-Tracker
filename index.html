@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Task & Time Tracker – Automatisiere deine Betriebsprozesse mit Univine." />
+  <meta name="author" content="M. Höpfler" />
+  <meta property="og:title" content="Univine Task & Time Tracker" />
+  <meta property="og:description" content="Ein Tool zur Verwaltung von Aufgaben und Zeiterfassung für deinen Betrieb." />
+  <meta property="og:image" content="https://raw.githubusercontent.com/hoepfler-m/projekt-univine/main/images/univine-logo.png" />
+  <meta property="og:url" content="https://hoepfler-m.github.io/projekt-univine/task-tracker.html" />
+  <title>Univine Task & Time Tracker</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;800&family=Playfair+Display:wght@500;800&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- SEO Structured Data -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Univine Task & Time Tracker",
+      "description": "Ein Tool zur Verwaltung von Aufgaben und Zeiterfassung für Betriebe.",
+      "url": "https://hoepfler-m.github.io/projekt-univine/task-tracker.html",
+      "author": {
+        "@type": "Person",
+        "name": "M. Höpfler"
+      }
+    }
+  </script>
+
+  <!-- Styles -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: linear-gradient(to bottom, #0a0a23, #1e3a8a);
+      color: #ffffff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      text-shadow: 0 0 10px rgba(74, 222, 128, 0.8);
+    }
+
+    h2 {
+      font-size: 2.5rem;
+    }
+
+    p {
+      line-height: 1.8;
+      font-weight: 500;
+      font-size: 1.1rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 3rem 0;
+    }
+
+    .hero img {
+      width: 60%;
+      max-width: 600px;
+      filter: drop-shadow(0 0 20px rgba(74, 222, 128, 0.8));
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .hero img:hover {
+      transform: scale(1.05);
+    }
+
+    .hero img.glow {
+      animation: pulse 1s ease;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .task-form {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    .task-form input, .task-form select {
+      padding: 0.8rem;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      font-size: 1rem;
+      margin-right: 1rem;
+      width: 200px;
+    }
+
+    .task-form button {
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(to right, #1e3a8a, #4ade80);
+      color: #ffffff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .task-form button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(74, 222, 128, 0.5);
+    }
+
+    .filter {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .filter select {
+      padding: 0.8rem;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      font-size: 1rem;
+    }
+
+    .task-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .task-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+    }
+
+    .task-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 30px rgba(74, 222, 128, 0.5);
+    }
+
+    .task-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .task-card p {
+      font-size: 1rem;
+      color: #d1d5db;
+      margin-bottom: 1rem;
+    }
+
+    .task-card .status {
+      font-size: 0.9rem;
+      color: #4ade80;
+      margin-bottom: 0.5rem;
+    }
+
+    .task-card .time {
+      font-size: 0.9rem;
+      color: #d1d5db;
+    }
+
+    .task-card .actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .task-card button {
+      padding: 0.6rem 1rem;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(to right, #1e3a8a, #4ade80);
+      color: #ffffff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .task-card button:hover {
+      transform: scale(1.05);
+    }
+
+    .task-card .delete-btn {
+      background: linear-gradient(to right, #dc2626, #f87171);
+    }
+
+    .report {
+      margin-top: 3rem;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .report p {
+      font-size: 1.1rem;
+      color: #d1d5db;
+    }
+
+    footer {
+      background: linear-gradient(to bottom, #0a0a23, #1e3a8a);
+      padding: 3rem 2rem;
+      text-align: center;
+      color: #ffffff;
+      font-size: 0.9rem;
+      margin-top: 3rem;
+    }
+
+    footer a {
+      color: #4ade80;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    footer a:hover {
+      color: #ffffff;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1.5rem;
+      }
+
+      .hero img {
+        width: 80%;
+      }
+
+      .task-form input, .task-form select {
+        width: 100%;
+        margin-bottom: 1rem;
+      }
+
+      .task-form button {
+        width: 100%;
+      }
+
+      .task-list {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <section class="hero">
+      <img src="https://raw.githubusercontent.com/hoepfler-m/projekt-univine/main/images/univine-logo.png" alt="Univine Logo">
+      <h1>Task & Time Tracker</h1>
+      <p>Automatisiere deine Betriebsprozesse mit Univine</p>
+    </section>
+
+    <section class="task-form">
+      <input type="text" id="task-name" placeholder="Aufgabenname" required>
+      <select id="task-status">
+        <option value="Offen">Offen</option>
+        <option value="In Arbeit">In Arbeit</option>
+        <option value="Erledigt">Erledigt</option>
+      </select>
+      <button onclick="addTask()">Aufgabe hinzufügen</button>
+    </section>
+
+    <section class="filter">
+      <select id="filter-status" onchange="filterTasks()">
+        <option value="Alle">Alle Aufgaben</option>
+        <option value="Offen">Offen</option>
+        <option value="In Arbeit">In Arbeit</option>
+        <option value="Erledigt">Erledigt</option>
+      </select>
+    </section>
+
+    <section class="task-list" id="task-list">
+      <!-- Aufgaben werden hier dynamisch eingefügt -->
+    </section>
+
+    <section class="report" id="report">
+      <h2>Bericht</h2>
+      <p id="report-text">Noch keine Daten verfügbar.</p>
+    </section>
+  </div>
+
+  <footer>
+    <p>©️ 2025 M. Höpfler | <a href="https://github.com/hoepfler-m/projekt-univine">Univine</a></p>
+  </footer>
+
+  <script>
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+    function addTask() {
+      const name = document.getElementById('task-name').value;
+      const status = document.getElementById('task-status').value;
+      if (!name) return alert('Bitte einen Aufgabennamen eingeben!');
+      tasks.push({
+        id: Date.now(),
+        name,
+        status,
+        time: 0,
+        timerRunning: false,
+        lastStart: null
+      });
+      saveTasks();
+      renderTasks();
+      document.getElementById('task-name').value = '';
+    }
+
+    function startStopTimer(id) {
+      const task = tasks.find(t => t.id === id);
+      if (!task) return;
+      if (task.timerRunning) {
+        task.timerRunning = false;
+        task.time += Math.floor((Date.now() - task.lastStart) / 1000);
+      } else {
+        task.timerRunning = true;
+        task.lastStart = Date.now();
+      }
+      saveTasks();
+      renderTasks();
+      if (task.timerRunning) {
+        setTimeout(() => updateTimer(id), 1000);
+      }
+    }
+
+    function updateTimer(id) {
+      const task = tasks.find(t => t.id === id);
+      if (task && task.timerRunning) {
+        task.time = Math.floor((Date.now() - task.lastStart) / 1000) + (task.time || 0);
+        saveTasks();
+        renderTasks();
+        setTimeout(() => updateTimer(id), 1000);
+      }
+    }
+
+    function deleteTask(id) {
+      tasks = tasks.filter(t => t.id !== id);
+      saveTasks();
+      renderTasks();
+    }
+
+    function saveTasks() {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      updateReport();
+    }
+
+    function renderTasks(filter = 'Alle') {
+      const taskList = document.getElementById('task-list');
+      taskList.innerHTML = '';
+      const filteredTasks = filter === 'Alle' ? tasks : tasks.filter(t => t.status === filter);
+      filteredTasks.forEach(task => {
+        const card = document.createElement('div');
+        card.className = 'task-card';
+        card.innerHTML = `
+          <h3>${task.name}</h3>
+          <p class="status">Status: ${task.status}</p>
+          <p class="time">Zeit: ${formatTime(task.time)}</p>
+          <div class="actions">
+            <button onclick="startStopTimer(${task.id})">${task.timerRunning ? 'Stop' : 'Start'}</button>
+            <button class="delete-btn" onclick="deleteTask(${task.id})">Löschen</button>
+          </div>
+        `;
+        taskList.appendChild(card);
+      });
+    }
+
+    function formatTime(seconds) {
+      const h = Math.floor(seconds / 3600);
+      const m = Math.floor((seconds % 3600) / 60);
+      const s = seconds % 60;
+      return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    }
+
+    function filterTasks() {
+      const filter = document.getElementById('filter-status').value;
+      renderTasks(filter);
+    }
+
+    function updateReport() {
+      const totalTime = tasks.reduce((sum, task) => sum + (task.time || 0), 0);
+      const completed = tasks.filter(t => t.status === 'Erledigt').length;
+      document.getElementById('report-text').innerHTML = `
+        Gesamtarbeitszeit: ${formatTime(totalTime)}<br>
+        Erledigte Aufgaben: ${completed} von ${tasks.length}
+      `;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderTasks();
+      updateReport();
+      const logo = document.querySelector('.hero img');
+      let clickCount = 0;
+      logo.addEventListener('click', () => {
+        clickCount++;
+        if (clickCount === 3) {
+          logo.classList.add('glow');
+          setTimeout(() => logo.classList.remove('glow'), 1000);
+          clickCount = 0;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
